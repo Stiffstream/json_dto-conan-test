@@ -16,7 +16,7 @@ conan remote add stiffstream https://api.bintray.com/conan/stiffstream/public
 2. Add json_dto to your `conanfile.txt`/`conanfile.py`:
 ```
 [requires]
-json-dto/0.2.8@stiffstream/stable
+json_dto/0.2.8@stiffstream/stable
 ```
 
 3. Install dependencies for your project:
@@ -31,7 +31,7 @@ One of the following approaches can be used:
 ```cmake
 # 1. Find and add dependency.
 find_package(json_dto CONFIG REQUIRED)
-target_link_libraries(your_target json-dto::json-dto)
+target_link_libraries(your_target json_dto::json_dto)
 
 # 2. Setting up dependencies with Conan
 target_link_libraries(your_target ${CONAN_LIBS})
