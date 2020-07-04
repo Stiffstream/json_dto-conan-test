@@ -1,8 +1,9 @@
 from conans import ConanFile, CMake, tools
 import os
 
+
 class JsondtoConan(ConanFile):
-    name = "json_dto"
+    name = "json-dto"
     version = "0.2.9.2"
     license = "BSD-3-Clause"
     author = "Stiffstream info@stiffstream.com"
@@ -12,7 +13,7 @@ class JsondtoConan(ConanFile):
     generators = "cmake"
 
     _cmake = None
-    
+
     @property
     def _source_subfolder(self):
         return "source_subfolder"
@@ -24,25 +25,23 @@ class JsondtoConan(ConanFile):
         # https://github.com/Stiffstream/json_dto/archive/v.0.2.8.tar.gz
         source_url = "https://github.com/Stiffstream/json_dto/archive"
         tools.get("{0}/v.{1}.tar.gz".format(source_url, self.version))
-        extracted_dir = self.name + "-v." + self.version
+        extracted_dir = self.name.replace('-', '_') + "-v." + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
     def _configure_cmake(self):
         if self._cmake:
             return self._cmake
         self._cmake = CMake(self)
-        cmake.definitions['JSON_DTO_INSTALL'] = True
-        cmake.definitions['JSON_DTO_FIND_DEPS'] = False
-        cmake.configure(source_folder = self._source_subfolder + "/dev/json_dto")
-        
-    def build(self):
-        cmake = self._configure_cmake()
-        cmake.build()
+        self._cmake.definitions['JSON_DTO_INSTALL'] = True
+        self._cmake.definitions['JSON_DTO_FIND_DEPS'] = False
+        self._cmake.configure(
+            source_folder=self._source_subfolder + "/dev/json_dto")
+        return self._cmake
 
     def package(self):
         cmake = self._configure_cmake()
         cmake.install()
-        self.copy("license*", src=self.source_subfolder, dst="licenses", ignore_case=True, keep_path=False)
+        self.copy("LICENSE", src=self._source_subfolder, dst="licenses")
 
     def package_id(self):
         self.info.header_only()
